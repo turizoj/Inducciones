@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+
+/* Guía de estilos de SIGEIN (documento del proyecto, sección 19.1) */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-primario: #1f4e79;
+  --color-secundario: #2e75b6;
+  --color-exito: #2e7d32;
+  --color-alerta: #ed6c02;
+  --color-error: #c62828;
+  --color-fondo: #f7f9fc;
+}
+
+body {
+  @apply bg-fondo text-slate-800 antialiased;
+}

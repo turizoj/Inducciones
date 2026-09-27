@@ -1,0 +1,296 @@
+// Modelo de datos de SIGEIN (documento del proyecto, secciones 17 y 18)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum EstadoUsuario {
+  activo
+  inactivo
+}
+
+enum EstadoRegistro {
+  activo
+  inactivo
+}
+
+enum EstadoPrograma {
+  borrador
+  publicado
+  archivado
+}
+
+enum TipoContenido {
+  video
+  pdf
+  texto
+  enlace
+}
+
+enum TipoPregunta {
+  unica
+  multiple
+  verdadero_falso
+}
+
+enum EstadoAsignacion {
+  pendiente
+  en_curso
+  completada
+  vencida
+}
+
+model Rol {
+  id       Int       @id @default(autoincrement())
+  nombre   String    @unique @db.VarChar(40)
+  usuarios Usuario[]
+
+  @@map("roles")
+}
+
+model Area {
+  id          Int            @id @default(autoincrement())
+  nombre      String         @unique @db.VarChar(80)
+  descripcion String?        @db.VarChar(255)
+  estado      EstadoRegistro @default(activo)
+  jefeId      Int?           @map("jefe_id")
+  jefe        Usuario?       @relation("JefeArea", fields: [jefeId], references: [id])
+  cargos      Cargo[]
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  @@index([jefeId])
+  @@map("areas")
+}
+
+model Cargo {
+  id        Int            @id @default(autoincrement())
+  nombre    String         @db.VarChar(80)
+  areaId    Int            @map("area_id")
+  area      Area           @relation(fields: [areaId], references: [id])
+  estado    EstadoRegistro @default(activo)
+  usuarios  Usuario[]
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  @@unique([areaId, nombre])
+  @@map("cargos")
+}
+
+model Usuario {
+  id                  Int           @id @default(autoincrement())
+  documento           String        @unique @db.VarChar(20)
+  nombres             String        @db.VarChar(80)
+  apellidos           String        @db.VarChar(80)
+  email               String        @unique @db.VarChar(120)
+  passwordHash        String        @map("password_hash") @db.VarChar(255)
+  telefono            String?       @db.VarChar(20)
+  fechaIngreso        DateTime      @map("fecha_ingreso") @db.Date
+  rolId               Int           @map("rol_id")
+  rol                 Rol           @relation(fields: [rolId], references: [id])
+  cargoId             Int?          @map("cargo_id")
+  cargo               Cargo?        @relation(fields: [cargoId], references: [id])
+  estado              EstadoUsuario @default(activo)
+  aceptaDatosAt       DateTime?     @map("acepta_datos_at")
+  ultimoAcceso        DateTime?     @map("ultimo_acceso")
+  intentosFallidos    Int           @default(0) @map("intentos_fallidos")
+  bloqueadoHasta      DateTime?     @map("bloqueado_hasta")
+  resetTokenHash      String?       @map("reset_token_hash") @db.VarChar(255)
+  resetTokenExpira    DateTime?     @map("reset_token_expira")
+  createdAt           DateTime      @default(now()) @map("created_at")
+
+  areasDirigidas      Area[]          @relation("JefeArea")
+  programasCreados    Programa[]
+  asignaciones        Asignacion[]    @relation("AsignacionColaborador")
+  asignacionesHechas  Asignacion[]    @relation("AsignacionAsignador")
+  notificaciones      Notificacion[]
+
+  @@index([rolId])
+  @@index([cargoId])
+  @@map("usuarios")
+}
+
+model Programa {
+  id            Int            @id @default(autoincrement())
+  titulo        String         @db.VarChar(150)
+  descripcion   String?        @db.Text
+  imagenUrl     String?        @map("imagen_url") @db.VarChar(255)
+  duracionHoras Int            @map("duracion_horas")
+  obligatorio   Boolean        @default(true)
+  estado        EstadoPrograma @default(borrador)
+  creadoPor     Int            @map("creado_por")
+  creador       Usuario        @relation(fields: [creadoPor], references: [id])
+  modulos       Modulo[]
+  asignaciones  Asignacion[]
+  createdAt     DateTime       @default(now()) @map("created_at")
+
+  @@index([creadoPor])
+  @@map("programas")
+}
+
+model Modulo {
+  id          Int         @id @default(autoincrement())
+  programaId  Int         @map("programa_id")
+  programa    Programa    @relation(fields: [programaId], references: [id], onDelete: Cascade)
+  titulo      String      @db.VarChar(150)
+  descripcion String?     @db.Text
+  orden       Int
+  contenidos  Contenido[]
+  evaluacion  Evaluacion?
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([programaId])
+  @@map("modulos")
+}
+
+model Contenido {
+  id         Int                 @id @default(autoincrement())
+  moduloId   Int                 @map("modulo_id")
+  modulo     Modulo              @relation(fields: [moduloId], references: [id], onDelete: Cascade)
+  titulo     String              @db.VarChar(150)
+  tipo       TipoContenido
+  url        String?             @db.VarChar(255)
+  texto      String?             @db.Text
+  orden      Int
+  progresos  ProgresoContenido[]
+  createdAt  DateTime            @default(now()) @map("created_at")
+
+  @@index([moduloId])
+  @@map("contenidos")
+}
+
+model Evaluacion {
+  id              Int                 @id @default(autoincrement())
+  moduloId        Int                 @unique @map("modulo_id")
+  modulo          Modulo              @relation(fields: [moduloId], references: [id], onDelete: Cascade)
+  notaMinima      Decimal             @default(3.5) @map("nota_minima") @db.Decimal(4, 1)
+  intentosMax     Int                 @default(3) @map("intentos_max")
+  tiempoLimiteMin Int?                @map("tiempo_limite_min")
+  preguntas       Pregunta[]
+  intentos        IntentoEvaluacion[]
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  @@map("evaluaciones")
+}
+
+model Pregunta {
+  id           Int          @id @default(autoincrement())
+  evaluacionId Int          @map("evaluacion_id")
+  evaluacion   Evaluacion   @relation(fields: [evaluacionId], references: [id], onDelete: Cascade)
+  enunciado    String       @db.Text
+  tipo         TipoPregunta
+  orden        Int
+  opciones     Opcion[]
+  respuestas   Respuesta[]
+
+  @@index([evaluacionId])
+  @@map("preguntas")
+}
+
+model Opcion {
+  id         Int         @id @default(autoincrement())
+  preguntaId Int         @map("pregunta_id")
+  pregunta   Pregunta    @relation(fields: [preguntaId], references: [id], onDelete: Cascade)
+  texto      String      @db.VarChar(255)
+  esCorrecta Boolean     @default(false) @map("es_correcta")
+  respuestas Respuesta[]
+
+  @@index([preguntaId])
+  @@map("opciones")
+}
+
+model Asignacion {
+  id               Int                 @id @default(autoincrement())
+  usuarioId        Int                 @map("usuario_id")
+  usuario          Usuario             @relation("AsignacionColaborador", fields: [usuarioId], references: [id])
+  programaId       Int                 @map("programa_id")
+  programa         Programa            @relation(fields: [programaId], references: [id])
+  asignadoPor      Int                 @map("asignado_por")
+  asignador        Usuario             @relation("AsignacionAsignador", fields: [asignadoPor], references: [id])
+  fechaAsignacion  DateTime            @map("fecha_asignacion") @db.Date
+  fechaLimite      DateTime            @map("fecha_limite") @db.Date
+  estado           EstadoAsignacion    @default(pendiente)
+  porcentajeAvance Decimal             @default(0) @map("porcentaje_avance") @db.Decimal(5, 2)
+  progresos        ProgresoContenido[]
+  intentos         IntentoEvaluacion[]
+  certificado      Certificado?
+  createdAt        DateTime            @default(now()) @map("created_at")
+
+  @@index([usuarioId])
+  @@index([programaId])
+  @@index([asignadoPor])
+  @@map("asignaciones")
+}
+
+model ProgresoContenido {
+  id           Int        @id @default(autoincrement())
+  asignacionId Int        @map("asignacion_id")
+  asignacion   Asignacion @relation(fields: [asignacionId], references: [id], onDelete: Cascade)
+  contenidoId  Int        @map("contenido_id")
+  contenido    Contenido  @relation(fields: [contenidoId], references: [id], onDelete: Cascade)
+  vistoAt      DateTime   @default(now()) @map("visto_at")
+
+  @@unique([asignacionId, contenidoId])
+  @@index([contenidoId])
+  @@map("progreso_contenido")
+}
+
+model IntentoEvaluacion {
+  id             Int         @id @default(autoincrement())
+  asignacionId   Int         @map("asignacion_id")
+  asignacion     Asignacion  @relation(fields: [asignacionId], references: [id], onDelete: Cascade)
+  evaluacionId   Int         @map("evaluacion_id")
+  evaluacion     Evaluacion  @relation(fields: [evaluacionId], references: [id], onDelete: Cascade)
+  numeroIntento  Int         @map("numero_intento")
+  nota           Decimal?    @db.Decimal(4, 1)
+  aprobado       Boolean     @default(false)
+  iniciadoAt     DateTime    @default(now()) @map("iniciado_at")
+  finalizadoAt   DateTime?   @map("finalizado_at")
+  respuestas     Respuesta[]
+
+  @@index([asignacionId])
+  @@index([evaluacionId])
+  @@map("intentos_evaluacion")
+}
+
+model Respuesta {
+  id         Int               @id @default(autoincrement())
+  intentoId  Int               @map("intento_id")
+  intento    IntentoEvaluacion @relation(fields: [intentoId], references: [id], onDelete: Cascade)
+  preguntaId Int               @map("pregunta_id")
+  pregunta   Pregunta          @relation(fields: [preguntaId], references: [id], onDelete: Cascade)
+  opcionId   Int               @map("opcion_id")
+  opcion     Opcion            @relation(fields: [opcionId], references: [id], onDelete: Cascade)
+
+  @@index([intentoId])
+  @@index([preguntaId])
+  @@index([opcionId])
+  @@map("respuestas")
+}
+
+model Certificado {
+  id                 Int        @id @default(autoincrement())
+  asignacionId       Int        @unique @map("asignacion_id")
+  asignacion         Asignacion @relation(fields: [asignacionId], references: [id])
+  codigoVerificacion String     @unique @map("codigo_verificacion") @db.VarChar(40)
+  fechaEmision       DateTime   @map("fecha_emision") @db.Date
+  pdfUrl             String?    @map("pdf_url") @db.VarChar(255)
+
+  @@map("certificados")
+}
+
+model Notificacion {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int      @map("usuario_id")
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  titulo    String   @db.VarChar(150)
+  mensaje   String   @db.VarChar(255)
+  leida     Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([usuarioId])
+  @@map("notificaciones")
+}
