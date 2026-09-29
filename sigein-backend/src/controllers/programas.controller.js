@@ -4,17 +4,7 @@ const contenidosService = require('../services/contenidos.service');
 const { HttpError } = require('../utils/errores');
 const { rutaPublica, verificarTipoReal } = require('../utils/archivos');
 const { idDeRuta } = require('../utils/textos');
-
-// Envuelve cada acción: responde con lo que devuelve el servicio o pasa el error al manejador central
-function accion(fn, estado = 200) {
-  return async (req, res, next) => {
-    try {
-      res.status(estado).json(await fn(req));
-    } catch (err) {
-      next(err);
-    }
-  };
-}
+const accion = require('../utils/accion');
 
 const id = (req) => idDeRuta(req.params.id);
 

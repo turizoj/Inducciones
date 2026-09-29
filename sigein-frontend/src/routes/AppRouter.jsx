@@ -11,6 +11,8 @@ import AreasCargos from '../pages/admin/estructura/AreasCargos'
 import Programas from '../pages/admin/programas/Programas'
 import EditorPrograma from '../pages/admin/programas/EditorPrograma'
 import MisInducciones from '../pages/colaborador/MisInducciones'
+import VisorInduccion from '../pages/colaborador/VisorInduccion'
+import Asignaciones from '../pages/asignaciones/Asignaciones'
 import EnConstruccion from '../components/EnConstruccion'
 import { ROLES } from '../utils/roles'
 
@@ -35,7 +37,7 @@ export default function AppRouter() {
           <Route path="/admin/areas" element={<AreasCargos />} />
           <Route path="/admin/programas" element={<Programas />} />
           <Route path="/admin/programas/:id" element={<EditorPrograma />} />
-          <Route path="/admin/asignaciones" element={<EnConstruccion titulo="Asignaciones" historia="HU-08" sprint="Sprint 4" />} />
+          <Route path="/admin/asignaciones" element={<Asignaciones />} />
           <Route path="/admin/reportes" element={<EnConstruccion titulo="Reportes" historia="HU-14" sprint="Sprint 6" />} />
         </Route>
       </Route>
@@ -44,7 +46,7 @@ export default function AppRouter() {
       <Route element={<RutaProtegida roles={[ROLES.JEFE]} />}>
         <Route element={<PanelLayout />}>
           <Route path="/jefe" element={<EnConstruccion titulo="Progreso de mi equipo" historia="HU-13" sprint="Sprint 6" />} />
-          <Route path="/jefe/asignaciones" element={<EnConstruccion titulo="Asignar inducción" historia="HU-08" sprint="Sprint 4" />} />
+          <Route path="/jefe/asignaciones" element={<Asignaciones />} />
         </Route>
       </Route>
 
@@ -52,6 +54,7 @@ export default function AppRouter() {
       <Route element={<RutaProtegida roles={[ROLES.COLABORADOR]} />}>
         <Route element={<PanelLayout />}>
           <Route path="/mis-inducciones" element={<MisInducciones />} />
+          <Route path="/mis-inducciones/:id" element={<VisorInduccion />} />
           <Route path="/certificados" element={<EnConstruccion titulo="Certificados" historia="HU-12" sprint="Sprint 5" />} />
         </Route>
       </Route>

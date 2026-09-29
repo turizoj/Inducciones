@@ -194,7 +194,7 @@ function ImagenPrograma({ programa, mostrarAviso }) {
   return (
     <div className="flex shrink-0 items-center gap-3 lg:flex-col lg:items-start">
       <div className="relative">
-        <MiniaturaPrograma programa={programa} clases="size-24 lg:h-28 lg:w-44" />
+        <MiniaturaPrograma programa={programa} clases="size-24 rounded-lg lg:h-28 lg:w-44" />
         {mutacion.isPending && (
           <span className="absolute inset-0 grid place-items-center rounded-lg bg-white/70">
             <LoaderCircle className="size-6 animate-spin text-primario" aria-hidden="true" />

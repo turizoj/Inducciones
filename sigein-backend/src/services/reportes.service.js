@@ -1,7 +1,9 @@
 const prisma = require('../config/prisma');
+const { actualizarVencidas } = require('./avance.service');
 
 // RF-23: indicadores del tablero del administrador
 async function resumen() {
+  await actualizarVencidas();
   const [colaboradoresActivos, enCurso, completadas, programasPublicados, areas, sinCargo, ultimosUsuarios] =
     await Promise.all([
       prisma.usuario.count({ where: { estado: 'activo', rol: { nombre: 'Colaborador' } } }),

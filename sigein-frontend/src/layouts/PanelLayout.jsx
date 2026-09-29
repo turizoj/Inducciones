@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react'
 import Logo from '../components/Logo'
+import Campana from '../components/Campana'
 import useAuth from '../hooks/useAuth'
 import { ROLES } from '../utils/roles'
 
@@ -90,7 +91,8 @@ export default function PanelLayout() {
           <Menu className="size-6" />
         </button>
         <div className="ml-auto flex items-center gap-3">
-          <div className="text-right">
+          <Campana />
+          <div className="hidden text-right sm:block">
             <p className="text-sm font-semibold text-slate-800">
               {usuario.nombres} {usuario.apellidos}
             </p>
