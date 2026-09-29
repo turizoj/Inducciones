@@ -14,3 +14,32 @@
 body {
   @apply bg-fondo text-slate-800 antialiased;
 }
+
+/* Texto enriquecido de los contenidos (editor y vista) */
+.contenido-html {
+  @apply leading-relaxed;
+}
+.contenido-html > * + * {
+  @apply mt-3;
+}
+.contenido-html h2 {
+  @apply text-lg font-bold text-slate-900;
+}
+.contenido-html h3 {
+  @apply text-base font-semibold text-slate-900;
+}
+.contenido-html ul {
+  @apply list-disc pl-6;
+}
+.contenido-html ol {
+  @apply list-decimal pl-6;
+}
+.contenido-html a {
+  @apply font-medium text-secundario underline;
+}
+.contenido-html blockquote {
+  @apply border-l-4 border-secundario/40 pl-3 text-slate-600 italic;
+}
+.contenido-html code {
+  @apply rounded bg-slate-100 px-1 text-[0.9em];
+}

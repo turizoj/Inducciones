@@ -16,4 +16,11 @@ function normalizar(texto) {
     .toLowerCase();
 }
 
-module.exports = { idDeRuta, normalizar };
+// Comprueba que dos listas de ids tengan los mismos elementos, sin importar el orden
+function mismosIds(a, b) {
+  const ordenar = (lista) => [...lista].sort((x, y) => x - y);
+  const [x, y] = [ordenar(a), ordenar(b)];
+  return x.length === y.length && x.every((id, i) => id === y[i]);
+}
+
+module.exports = { idDeRuta, normalizar, mismosIds };
