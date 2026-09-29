@@ -10,6 +10,7 @@ const cargosRoutes = require('./routes/cargos.routes');
 const reportesRoutes = require('./routes/reportes.routes');
 const programasRoutes = require('./routes/programas.routes');
 const asignacionesRoutes = require('./routes/asignaciones.routes');
+const evaluacionesRoutes = require('./routes/evaluaciones.routes');
 const errores = require('./middlewares/errores');
 const { CARPETA_UPLOADS } = require('./utils/archivos');
 
@@ -46,6 +47,9 @@ app.use('/api/asignaciones', asignacionesRoutes.asignaciones);
 app.use('/api/mis-inducciones', asignacionesRoutes.misInducciones);
 app.use('/api/progreso', asignacionesRoutes.progreso);
 app.use('/api/notificaciones', asignacionesRoutes.notificaciones);
+app.use('/api/modulos', evaluacionesRoutes.evaluacionModulo);
+app.use('/api/evaluaciones', evaluacionesRoutes.evaluaciones);
+app.use('/api/certificados', evaluacionesRoutes.certificados);
 
 app.use((req, res) => res.status(404).json({ mensaje: 'Recurso no encontrado' }));
 app.use(errores);

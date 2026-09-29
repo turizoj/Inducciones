@@ -56,7 +56,8 @@ export default function EditorPrograma() {
   const queryClient = useQueryClient()
   const [aviso, mostrarAviso] = useAviso()
   const { data: programa, isLoading, error } = useQuery({ queryKey: ['programa', id], queryFn: () => obtenerPrograma(id) })
-  const [seleccionado, setSeleccionado] = useState(null)
+  // Al volver del constructor de evaluaciones se muestra el mismo módulo
+  const [seleccionado, setSeleccionado] = useState(location.state?.moduloId ?? null)
   const [editandoDatos, setEditandoDatos] = useState(false)
   const { pedir, dialogo } = useConfirmacion()
 

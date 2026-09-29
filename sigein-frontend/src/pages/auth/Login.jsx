@@ -76,6 +76,13 @@ export default function Login() {
           Iniciar sesión
         </Boton>
       </form>
+
+      <p className="mt-8 border-t border-slate-200 pt-5 text-center text-sm text-slate-500">
+        ¿Recibió un certificado?{' '}
+        <Link to="/verificar" className="font-medium text-secundario hover:underline">
+          Verifíquelo aquí
+        </Link>
+      </p>
     </AuthLayout>
   )
 }

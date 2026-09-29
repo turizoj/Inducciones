@@ -1,6 +1,7 @@
 const prisma = require('../config/prisma');
 const { HttpError } = require('../utils/errores');
 const { incluirAvance, calcularAvance, estadoSegun, actualizarVencidas } = require('./avance.service');
+const certificadosService = require('./certificados.service');
 
 // HU-09: inducciones asignadas al colaborador con avance, estado y fecha límite
 async function listar(usuarioId) {
@@ -45,8 +46,21 @@ async function sincronizar(asignacion, avance) {
         mensaje: `Terminó "${asignacion.programa.titulo}". ¡Felicitaciones!`,
       },
     });
+    // HU-12: al completar el programa se emite el certificado
+    await certificadosService.emitir(asignacion.id);
   }
   return estado;
+}
+
+// "Retomar donde lo dejé": primer contenido sin ver o evaluación sin aprobar de un módulo desbloqueado
+function siguientePendiente(modulos) {
+  for (const m of modulos) {
+    if (m.estado === 'bloqueado') break;
+    const contenido = m.contenidos.find((c) => !c.visto);
+    if (contenido) return { tipo: 'contenido', id: contenido.id };
+    if (m.evaluacion && !m.evaluacion.aprobada) return { tipo: 'evaluacion', id: m.evaluacion.id };
+  }
+  return null;
 }
 
 // HU-10: módulos con su estado (bloqueado, en curso, completado) y contenidos vistos
@@ -55,9 +69,7 @@ async function detalle(id, usuarioId) {
   const avance = calcularAvance(asignacion);
   const estado = await sincronizar(asignacion, avance);
   const { programa } = asignacion;
-
-  // "Retomar donde lo dejé": primer contenido sin ver de un módulo desbloqueado
-  const siguiente = avance.modulos.flatMap((m) => (m.estado === 'bloqueado' ? [] : m.contenidos)).find((c) => !c.visto);
+  const certificado = estado === 'completada' ? await prisma.certificado.findUnique({ where: { asignacionId: id } }) : null;
 
   return {
     id: asignacion.id,
@@ -72,7 +84,8 @@ async function detalle(id, usuarioId) {
       duracionHoras: programa.duracionHoras,
     },
     modulos: avance.modulos,
-    siguienteContenidoId: siguiente?.id ?? null,
+    siguiente: siguientePendiente(avance.modulos),
+    certificadoId: certificado?.id ?? null,
   };
 }
 
@@ -94,4 +107,4 @@ async function marcarVisto(asignacionId, contenidoId, usuarioId) {
   return detalle(asignacionId, usuarioId);
 }
 
-module.exports = { listar, detalle, marcarVisto };
+module.exports = { listar, detalle, marcarVisto, buscarPropia, sincronizar };

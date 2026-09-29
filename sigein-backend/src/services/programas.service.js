@@ -13,7 +13,9 @@ const incluirDetalle = {
     orderBy: { orden: 'asc' },
     include: {
       contenidos: { orderBy: { orden: 'asc' } },
-      evaluacion: { select: { id: true } },
+      evaluacion: {
+        select: { id: true, notaMinima: true, intentosMax: true, tiempoLimiteMin: true, _count: { select: { preguntas: true } } },
+      },
     },
   },
 };
@@ -31,7 +33,16 @@ function formatearDetalle({ _count, modulos, ...programa }) {
   return {
     ...programa,
     totalAsignaciones: _count.asignaciones,
-    modulos: modulos.map(({ evaluacion, ...m }) => ({ ...m, tieneEvaluacion: Boolean(evaluacion) })),
+    modulos: modulos.map(({ evaluacion, ...m }) => ({
+      ...m,
+      evaluacion: evaluacion && {
+        id: evaluacion.id,
+        notaMinima: Number(evaluacion.notaMinima),
+        intentosMax: evaluacion.intentosMax,
+        tiempoLimiteMin: evaluacion.tiempoLimiteMin,
+        totalPreguntas: evaluacion._count.preguntas,
+      },
+    })),
   };
 }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ClipboardCheck, Eye, Pencil, Plus, Trash2 } from 'lucide-react'
 import Alerta from '../../../components/Alerta'
@@ -151,17 +152,30 @@ export default function PanelModulo({ programa, modulo, mostrarAviso }) {
         )}
       </div>
 
-      <div className="flex flex-col gap-3 rounded-xl border border-dashed border-slate-300 bg-white p-5 sm:flex-row sm:items-center">
-        <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-400">
+      {/* HU-07: evaluación del módulo. Mientras no se apruebe, el módulo siguiente queda bloqueado. */}
+      <div
+        className={`flex flex-col gap-3 rounded-xl bg-white p-5 sm:flex-row sm:items-center ${modulo.evaluacion ? 'shadow-sm ring-1 ring-slate-200' : 'border border-dashed border-slate-300'}`}
+      >
+        <span
+          className={`grid size-10 shrink-0 place-items-center rounded-lg ${modulo.evaluacion ? 'bg-exito/10 text-exito' : 'bg-slate-100 text-slate-400'}`}
+        >
           <ClipboardCheck className="size-5" aria-hidden="true" />
         </span>
         <div className="flex-1">
-          <p className="font-semibold text-slate-700">Evaluación del módulo</p>
-          <p className="text-sm text-slate-500">El constructor de evaluaciones (HU-07) se desarrolla en el Sprint 5.</p>
+          <p className="font-semibold text-slate-800">Evaluación del módulo</p>
+          <p className="text-sm text-slate-500">
+            {modulo.evaluacion
+              ? `${modulo.evaluacion.totalPreguntas} pregunta(s) · Nota mínima ${modulo.evaluacion.notaMinima.toFixed(1)} · ${modulo.evaluacion.intentosMax} intento(s)` +
+                (modulo.evaluacion.tiempoLimiteMin ? ` · ${modulo.evaluacion.tiempoLimiteMin} min` : ' · Sin límite de tiempo')
+              : 'Opcional. Si la agrega, el colaborador debe aprobarla para pasar al módulo siguiente.'}
+          </p>
         </div>
-        <Boton variante="secundario" disabled>
-          Configurar evaluación
-        </Boton>
+        <Link
+          to={`/admin/programas/${programa.id}/modulos/${modulo.id}/evaluacion`}
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-secundario focus-visible:ring-offset-2"
+        >
+          {modulo.evaluacion ? 'Editar evaluación' : 'Crear evaluación'}
+        </Link>
       </div>
 
       {editandoModulo && (

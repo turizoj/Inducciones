@@ -10,8 +10,11 @@ import Usuarios from '../pages/admin/usuarios/Usuarios'
 import AreasCargos from '../pages/admin/estructura/AreasCargos'
 import Programas from '../pages/admin/programas/Programas'
 import EditorPrograma from '../pages/admin/programas/EditorPrograma'
+import ConstructorEvaluacion from '../pages/admin/programas/ConstructorEvaluacion'
 import MisInducciones from '../pages/colaborador/MisInducciones'
 import VisorInduccion from '../pages/colaborador/VisorInduccion'
+import Certificados from '../pages/colaborador/Certificados'
+import VerificarCertificado from '../pages/publico/VerificarCertificado'
 import Asignaciones from '../pages/asignaciones/Asignaciones'
 import EnConstruccion from '../components/EnConstruccion'
 import { ROLES } from '../utils/roles'
@@ -23,6 +26,8 @@ export default function AppRouter() {
       <Route path="/login" element={<Login />} />
       <Route path="/recuperar" element={<RecuperarPassword />} />
       <Route path="/restablecer" element={<RestablecerPassword />} />
+      <Route path="/verificar" element={<VerificarCertificado />} />
+      <Route path="/verificar/:codigo" element={<VerificarCertificado />} />
 
       {/* Primer ingreso: aceptación de la política de datos */}
       <Route element={<RutaProtegida exigirPolitica={false} />}>
@@ -37,6 +42,7 @@ export default function AppRouter() {
           <Route path="/admin/areas" element={<AreasCargos />} />
           <Route path="/admin/programas" element={<Programas />} />
           <Route path="/admin/programas/:id" element={<EditorPrograma />} />
+          <Route path="/admin/programas/:id/modulos/:moduloId/evaluacion" element={<ConstructorEvaluacion />} />
           <Route path="/admin/asignaciones" element={<Asignaciones />} />
           <Route path="/admin/reportes" element={<EnConstruccion titulo="Reportes" historia="HU-14" sprint="Sprint 6" />} />
         </Route>
@@ -55,7 +61,7 @@ export default function AppRouter() {
         <Route element={<PanelLayout />}>
           <Route path="/mis-inducciones" element={<MisInducciones />} />
           <Route path="/mis-inducciones/:id" element={<VisorInduccion />} />
-          <Route path="/certificados" element={<EnConstruccion titulo="Certificados" historia="HU-12" sprint="Sprint 5" />} />
+          <Route path="/certificados" element={<Certificados />} />
         </Route>
       </Route>
 
