@@ -214,6 +214,8 @@ model Asignacion {
   fechaLimite      DateTime            @map("fecha_limite") @db.Date
   estado           EstadoAsignacion    @default(pendiente)
   porcentajeAvance Decimal             @default(0) @map("porcentaje_avance") @db.Decimal(5, 2)
+  // HU-15: cuándo se envió el recordatorio de los 3 días antes de la fecha límite
+  recordatorioAt   DateTime?           @map("recordatorio_at")
   progresos        ProgresoContenido[]
   intentos         IntentoEvaluacion[]
   certificado      Certificado?

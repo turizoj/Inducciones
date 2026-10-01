@@ -1,17 +1,19 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { BookOpen, CircleAlert, CircleCheck, Clock, UserPlus, Users } from 'lucide-react'
+import { BookOpen, CircleAlert, CircleCheck, ClipboardCheck, Clock, UserPlus, Users } from 'lucide-react'
 import Alerta from '../../components/Alerta'
 import useAuth from '../../hooks/useAuth'
 import { obtenerResumen } from '../../api/admin'
 import { mensajeDeError } from '../../api/cliente'
 
-// RF-23: indicadores del tablero. Las inducciones se llenan a partir del Sprint 4
+// RF-23: indicadores del tablero
 const indicadores = [
   { clave: 'colaboradoresActivos', texto: 'Colaboradores activos', icono: Users, color: 'text-secundario bg-secundario/10' },
   { clave: 'enCurso', texto: 'Inducciones en curso', icono: Clock, color: 'text-alerta bg-alerta/10' },
   { clave: 'completadas', texto: 'Inducciones completadas', icono: CircleCheck, color: 'text-exito bg-exito/10' },
   { clave: 'programasPublicados', texto: 'Programas publicados', icono: BookOpen, color: 'text-primario bg-primario/10' },
+  // RF-23: porcentaje de intentos de evaluación aprobados
+  { clave: 'tasaAprobacion', texto: 'Aprobación de evaluaciones', icono: ClipboardCheck, color: 'text-exito bg-exito/10', sufijo: ' %' },
 ]
 
 const formatoFecha = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'short' })
@@ -31,14 +33,14 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {indicadores.map(({ clave, texto, icono: Icono, color }) => (
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {indicadores.map(({ clave, texto, icono: Icono, color, sufijo = '' }) => (
           <div key={clave} className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
             <span className={`grid size-10 place-items-center rounded-lg ${color}`}>
               <Icono className="size-5" aria-hidden="true" />
             </span>
             <p className="mt-4 text-3xl font-bold tabular-nums text-slate-900">
-              {isLoading ? <span className="inline-block h-8 w-12 animate-pulse rounded bg-slate-100" /> : (data?.indicadores[clave] ?? '—')}
+              {isLoading ? <span className="inline-block h-8 w-12 animate-pulse rounded bg-slate-100" /> : data?.indicadores[clave] == null ? '—' : `${data.indicadores[clave]}${sufijo}`}
             </p>
             <p className="text-sm text-slate-500">{texto}</p>
           </div>

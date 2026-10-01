@@ -30,7 +30,8 @@ app.use(
 );
 
 app.use(helmet());
-app.use(cors({ origin: frontendUrl }));
+// Content-Disposition se expone para que el navegador conozca el nombre de los archivos descargados
+app.use(cors({ origin: frontendUrl, exposedHeaders: ['Content-Disposition'] }));
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('dev'));
 

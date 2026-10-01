@@ -16,7 +16,8 @@ import VisorInduccion from '../pages/colaborador/VisorInduccion'
 import Certificados from '../pages/colaborador/Certificados'
 import VerificarCertificado from '../pages/publico/VerificarCertificado'
 import Asignaciones from '../pages/asignaciones/Asignaciones'
-import EnConstruccion from '../components/EnConstruccion'
+import Reportes from '../pages/admin/Reportes'
+import ProgresoEquipo from '../pages/jefe/ProgresoEquipo'
 import { ROLES } from '../utils/roles'
 
 export default function AppRouter() {
@@ -44,14 +45,14 @@ export default function AppRouter() {
           <Route path="/admin/programas/:id" element={<EditorPrograma />} />
           <Route path="/admin/programas/:id/modulos/:moduloId/evaluacion" element={<ConstructorEvaluacion />} />
           <Route path="/admin/asignaciones" element={<Asignaciones />} />
-          <Route path="/admin/reportes" element={<EnConstruccion titulo="Reportes" historia="HU-14" sprint="Sprint 6" />} />
+          <Route path="/admin/reportes" element={<Reportes />} />
         </Route>
       </Route>
 
       {/* Jefe de área */}
       <Route element={<RutaProtegida roles={[ROLES.JEFE]} />}>
         <Route element={<PanelLayout />}>
-          <Route path="/jefe" element={<EnConstruccion titulo="Progreso de mi equipo" historia="HU-13" sprint="Sprint 6" />} />
+          <Route path="/jefe" element={<ProgresoEquipo />} />
           <Route path="/jefe/asignaciones" element={<Asignaciones />} />
         </Route>
       </Route>
