@@ -189,13 +189,6 @@ export default function VisorInduccion() {
               )}
             </div>
           )}
-          {actual && actual.tipo === 'evaluacion' && anterior && (
-            <div className="mt-6 border-t border-slate-100 pt-4">
-              <Boton variante="secundario" onClick={() => ir(anterior)}>
-                <ArrowLeft className="size-4" aria-hidden="true" /> Anterior
-              </Boton>
-            </div>
-          )}
         </main>
       </div>
     </div>

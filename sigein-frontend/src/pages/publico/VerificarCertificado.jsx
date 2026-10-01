@@ -79,7 +79,9 @@ export default function VerificarCertificado() {
                 <BadgeCheck className="size-8 shrink-0 text-exito" aria-hidden="true" />
                 <div>
                   <p className="font-semibold text-exito">Certificado válido</p>
-                  <p className="text-xs text-slate-600">Emitido por {data.empresa} a través de SIGEIN</p>
+                  <p className="text-xs text-slate-600">
+                    {data.empresa === 'SIGEIN' ? 'Emitido a través de SIGEIN' : `Emitido por ${data.empresa} a través de SIGEIN`}
+                  </p>
                 </div>
               </div>
               <dl className="divide-y divide-slate-100 px-5">

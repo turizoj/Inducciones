@@ -99,9 +99,11 @@ function Formulario({ datos, programaId, moduloId }) {
   const queryClient = useQueryClient()
   const [aviso, mostrarAviso] = useAviso()
   const [formulario, setFormulario] = useState(() => aFormulario(datos.evaluacion))
-  const [errores, setErrores] = useState(null)
+  // Después del primer intento de guardar, los errores se recalculan mientras se corrige
+  const [mostrarErrores, setMostrarErrores] = useState(false)
   const { pedir, dialogo } = useConfirmacion()
   const bloqueada = Boolean(datos.evaluacion?.tieneIntentos)
+  const errores = mostrarErrores && !bloqueada ? validar(formulario) : null
   const volver = `/admin/programas/${programaId}`
 
   const guardar = useMutation({
@@ -145,9 +147,8 @@ function Formulario({ datos, programaId, moduloId }) {
 
   function enviar(e) {
     e.preventDefault()
-    const encontrados = bloqueada ? null : validar(formulario)
-    setErrores(encontrados)
-    if (encontrados) return
+    setMostrarErrores(true)
+    if (!bloqueada && validar(formulario)) return
     guardar.mutate({
       moduloId,
       notaMinima: Number(formulario.notaMinima),
