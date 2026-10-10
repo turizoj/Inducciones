@@ -50,7 +50,10 @@ Variables del backend (`sigein-backend/.env`):
 | `JWT_EXPIRES_IN` | Duración de la sesión | `8h` |
 | `PORT` | Puerto de la API | `4000` |
 | `FRONTEND_URL` | Dirección del frontend (enlaces de correos y del QR) | `http://localhost:5173` |
-| `EMPRESA_NOMBRE` | Nombre que aparece en certificados y reportes | `Mi Empresa S.A.S.` |
+| `EMPRESA_NOMBRE` | Nombre de la empresa que usa SIGEIN; aparece en certificados y reportes (vacío = "SIGEIN") | `Mi Empresa S.A.S.` |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` | Servidor de correo (opcional) | `smtp.gmail.com`, `587`, `false` |
+| `SMTP_USER`, `SMTP_PASS` | Cuenta y contraseña del correo | `talentohumano@empresa.com` |
+| `CORREO_REMITENTE` | Dirección que aparece como remitente | `talentohumano@empresa.com` |
 
 ### 1.3 Encender el sistema
 
@@ -65,9 +68,17 @@ Usuarios de prueba que crea `npx prisma db seed`:
 | Jefe de área | `jefe@sigein.com` | `Jefe123*` |
 | Colaborador | `colaborador@sigein.com` | `Colab123*` |
 
-> Los correos (bienvenida, recuperación de contraseña, asignaciones, recordatorios y certificados) se muestran por ahora en la consola del backend. Para enviarlos de verdad se configura Nodemailer en `sigein-backend/src/utils/correo.js`.
+### 1.4 Correos
 
-### 1.4 Pruebas
+SIGEIN envía correos de bienvenida, recuperación de contraseña, asignaciones, recordatorios de vencimiento y certificados.
+
+- **Sin configurar el correo** (`SMTP_HOST` vacío), los correos se muestran en la consola del backend. Sirve para pruebas y desarrollo.
+- **Para enviarlos de verdad**, complete las variables `SMTP_*` del `.env` con los datos del correo de la empresa y reinicie el backend. Al arrancar, la consola indica si la conexión funcionó.
+- **Con Gmail:** active la verificación en dos pasos de la cuenta, cree una *contraseña de aplicación* en https://myaccount.google.com/apppasswords y úsela en `SMTP_PASS` con `SMTP_HOST=smtp.gmail.com` y `SMTP_PORT=587`.
+
+Si un correo no se puede enviar, el error queda en la consola y la acción principal (crear el usuario, asignar la inducción…) se completa igual.
+
+### 1.5 Pruebas
 
 ```bash
 cd sigein-backend
@@ -83,7 +94,7 @@ Para probar la API con Postman o Thunder Client:
 2. Copie el `token` de la respuesta.
 3. En las demás peticiones, use la autorización **Bearer Token** con ese valor. Por ejemplo: `GET http://localhost:4000/api/programas`.
 
-### 1.5 Servicios de la API
+### 1.6 Servicios de la API
 
 | Método | Ruta | Uso | Rol |
 |---|---|---|---|
@@ -104,12 +115,12 @@ Para probar la API con Postman o Thunder Client:
 
 Códigos de respuesta: **200/201** correcto o creado · **400** datos inválidos (la respuesta indica el campo) · **401** falta la sesión o venció · **403** el rol no tiene permiso · **404** no encontrado · **409** conflicto (por ejemplo, un correo repetido) · **413** archivo demasiado grande · **500** error interno.
 
-### 1.6 Empaquetado para la entrega
+### 1.7 Empaquetado para la entrega
 
 - **Frontend:** `npm run build` genera la carpeta `dist/`. Comprímala como `sigein-frontend-v1.0.zip`; se publica en cualquier servidor web estático (Nginx, Apache, Netlify o Vercel).
 - **Backend:** comprima la carpeta `sigein-backend` **sin** `node_modules` ni `.env` como `sigein-backend-v1.0.zip`. Incluya `.env.example` y las migraciones de `prisma/migrations`. En producción se ejecuta con `npm start` y un administrador de procesos como PM2.
 
-### 1.7 Estructura del proyecto
+### 1.8 Estructura del proyecto
 
 ```
 sigein-backend/
