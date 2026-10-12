@@ -10,7 +10,7 @@ import { mensajeDeError } from '../../api/cliente'
 const formatoNota = (n) => Number(n).toFixed(1)
 
 // Las respuestas se guardan en el navegador mientras se presenta, por si se recarga la página
-const claveGuardado = (intentoId) => `sigein-intento-${intentoId}`
+const claveGuardado = (intentoId) => `inducta-intento-${intentoId}`
 function leerGuardadas(intentoId) {
   try {
     return JSON.parse(sessionStorage.getItem(claveGuardado(intentoId))) ?? {}

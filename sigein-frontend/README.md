@@ -1,6 +1,6 @@
-# SIGEIN · Frontend
+# Inducta · Frontend
 
-Aplicación web de SIGEIN hecha con React y Vite.
+Aplicación web de Inducta hecha con React y Vite.
 
 ```bash
 npm install

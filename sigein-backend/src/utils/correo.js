@@ -1,6 +1,9 @@
 const nodemailer = require('nodemailer');
 const { smtp, empresaNombre } = require('../config');
 
+// Si la empresa no configuró su nombre, solo se muestra "Inducta" (sin repetirlo)
+const firma = empresaNombre === 'Inducta' ? 'Inducta' : `${empresaNombre} · Inducta`;
+
 // RF-24: envío de correos con Nodemailer. Si no se configuró un servidor SMTP en el .env,
 // los correos se muestran en la consola del servidor (útil en desarrollo).
 const transporte = smtp.host
@@ -22,7 +25,7 @@ function aHtml(asunto, texto) {
   return `<div style="font-family:Arial,sans-serif;font-size:15px;color:#1e293b;max-width:560px">
   <p style="font-size:18px;font-weight:bold;color:#1f4e79;margin:0 0 16px">${escaparHtml(asunto)}</p>
   <p style="line-height:1.6;margin:0">${cuerpo}</p>
-  <p style="font-size:12px;color:#94a3b8;margin-top:24px">${escaparHtml(empresaNombre)} · Mensaje automático de SIGEIN. No responda a este correo.</p>
+  <p style="font-size:12px;color:#94a3b8;margin-top:24px">${escaparHtml(firma)} · Mensaje automático. No responda a este correo.</p>
 </div>`;
 }
 
@@ -35,7 +38,7 @@ async function enviarCorreo({ para, asunto, texto }) {
   }
   try {
     return await transporte.sendMail({
-      from: `"${empresaNombre} · SIGEIN" <${smtp.remitente}>`,
+      from: `"${firma}" <${smtp.remitente}>`,
       to: para,
       subject: asunto,
       text: texto,

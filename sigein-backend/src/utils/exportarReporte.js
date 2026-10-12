@@ -38,7 +38,7 @@ const COLUMNAS = [
 // HU-14: reporte en Excel con título, filtros aplicados, resumen y la tabla con autofiltro
 async function aExcel(reporte, filtrosTexto) {
   const libro = new ExcelJS.Workbook();
-  libro.creator = 'SIGEIN';
+  libro.creator = 'Inducta';
   libro.created = new Date();
   const hoja = libro.addWorksheet('Cumplimiento', { views: [{ state: 'frozen', ySplit: 6 }] });
   hoja.columns = COLUMNAS.map((c) => ({ width: c.ancho }));
@@ -130,7 +130,7 @@ async function aPdf(reporte, filtrosTexto) {
     doc.switchToPage(i);
     // El pie va dentro del margen inferior; sin esto PDFKit crearía una página nueva
     doc.page.margins.bottom = 0;
-    doc.font('Helvetica').fontSize(7.5).fillColor('#94a3b8').text(`Página ${i + 1} de ${rango.count} · SIGEIN`, x0, doc.page.height - 30, {
+    doc.font('Helvetica').fontSize(7.5).fillColor('#94a3b8').text(`Página ${i + 1} de ${rango.count} · Inducta`, x0, doc.page.height - 30, {
       width: ancho,
       align: 'right',
       lineBreak: false,

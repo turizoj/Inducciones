@@ -29,7 +29,7 @@ export default function VerificarCertificado() {
   return (
     <div className="min-h-screen bg-fondo px-4 py-10">
       <div className="mx-auto max-w-xl">
-        <Link to="/login" aria-label="Ir al inicio de SIGEIN">
+        <Link to="/login" aria-label="Ir al inicio de Inducta">
           <Logo />
         </Link>
         <h1 className="mt-8 text-2xl font-bold text-slate-900">Verificación de certificados</h1>
@@ -43,7 +43,7 @@ export default function VerificarCertificado() {
             id="codigo"
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
-            placeholder="SIG-2026-XXXXXXXX"
+            placeholder="IND-2026-XXXXXXXX"
             autoComplete="off"
             spellCheck="false"
             className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 font-mono text-sm uppercase outline-none focus:border-secundario focus:ring-2 focus:ring-secundario/20"
@@ -80,7 +80,7 @@ export default function VerificarCertificado() {
                 <div>
                   <p className="font-semibold text-exito">Certificado válido</p>
                   <p className="text-xs text-slate-600">
-                    {data.empresa === 'SIGEIN' ? 'Emitido a través de SIGEIN' : `Emitido por ${data.empresa} a través de SIGEIN`}
+                    {data.empresa === 'Inducta' ? 'Emitido a través de Inducta' : `Emitido por ${data.empresa} a través de Inducta`}
                   </p>
                 </div>
               </div>

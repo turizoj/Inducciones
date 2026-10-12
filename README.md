@@ -1,6 +1,6 @@
-# SIGEIN · Sistema Web de Gestión de Inducciones Empresariales
+# Inducta · Sistema Web de Gestión de Inducciones Empresariales
 
-SIGEIN permite a Talento Humano crear programas de inducción por módulos, cargar contenidos (videos, PDF, textos y enlaces), diseñar evaluaciones, asignar los programas por persona, área o cargo, seguir el avance en tiempo real y emitir certificados verificables con código QR.
+Inducta permite a Talento Humano crear programas de inducción por módulos, cargar contenidos (videos, PDF, textos y enlaces), diseñar evaluaciones, asignar los programas por persona, área o cargo, seguir el avance en tiempo real y emitir certificados verificables con código QR.
 
 | Parte | Tecnologías |
 |---|---|
@@ -50,27 +50,27 @@ Variables del backend (`sigein-backend/.env`):
 | `JWT_EXPIRES_IN` | Duración de la sesión | `8h` |
 | `PORT` | Puerto de la API | `4000` |
 | `FRONTEND_URL` | Dirección del frontend (enlaces de correos y del QR) | `http://localhost:5173` |
-| `EMPRESA_NOMBRE` | Nombre de la empresa que usa SIGEIN; aparece en certificados y reportes (vacío = "SIGEIN") | `Mi Empresa S.A.S.` |
+| `EMPRESA_NOMBRE` | Nombre de la empresa que usa Inducta; aparece en certificados y reportes (vacío = "Inducta") | `Mi Empresa S.A.S.` |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` | Servidor de correo (opcional) | `smtp.gmail.com`, `587`, `false` |
 | `SMTP_USER`, `SMTP_PASS` | Cuenta y contraseña del correo | `talentohumano@empresa.com` |
 | `CORREO_REMITENTE` | Dirección que aparece como remitente | `talentohumano@empresa.com` |
 
 ### 1.3 Encender el sistema
 
-- **En Windows, con doble clic:** ejecute `Iniciar SIGEIN.bat`. Enciende MySQL, el backend y el frontend, y abre el navegador. Para apagar, cierre las ventanas "Backend" y "Frontend".
+- **En Windows, con doble clic:** ejecute `Iniciar Inducta.bat`. Enciende MySQL, el backend y el frontend, y abre el navegador. Para apagar, cierre las ventanas "Backend" y "Frontend".
 - **Manualmente:** en dos terminales, `npm run dev` dentro de `sigein-backend` (puerto 4000) y dentro de `sigein-frontend` (puerto 5173).
 
 Usuarios de prueba que crea `npx prisma db seed`:
 
 | Rol | Correo | Contraseña |
 |---|---|---|
-| Administrador | `admin@sigein.com` | `Admin123*` |
-| Jefe de área | `jefe@sigein.com` | `Jefe123*` |
-| Colaborador | `colaborador@sigein.com` | `Colab123*` |
+| Administrador | `admin@inducta.com` | `Admin123*` |
+| Jefe de área | `jefe@inducta.com` | `Jefe123*` |
+| Colaborador | `colaborador@inducta.com` | `Colab123*` |
 
 ### 1.4 Correos
 
-SIGEIN envía correos de bienvenida, recuperación de contraseña, asignaciones, recordatorios de vencimiento y certificados.
+Inducta envía correos de bienvenida, recuperación de contraseña, asignaciones, recordatorios de vencimiento y certificados.
 
 - **Sin configurar el correo** (`SMTP_HOST` vacío), los correos se muestran en la consola del backend. Sirve para pruebas y desarrollo.
 - **Para enviarlos de verdad**, complete las variables `SMTP_*` del `.env` con los datos del correo de la empresa y reinicie el backend. Al arrancar, la consola indica si la conexión funcionó.
@@ -90,7 +90,7 @@ npm run build     # compila el frontend en la carpeta dist/
 
 Para probar la API con Postman o Thunder Client:
 
-1. Envíe `POST http://localhost:4000/api/auth/login` con el cuerpo `{"email": "admin@sigein.com", "password": "Admin123*"}`.
+1. Envíe `POST http://localhost:4000/api/auth/login` con el cuerpo `{"email": "admin@inducta.com", "password": "Admin123*"}`.
 2. Copie el `token` de la respuesta.
 3. En las demás peticiones, use la autorización **Bearer Token** con ese valor. Por ejemplo: `GET http://localhost:4000/api/programas`.
 
@@ -117,8 +117,8 @@ Códigos de respuesta: **200/201** correcto o creado · **400** datos inválidos
 
 ### 1.7 Empaquetado para la entrega
 
-- **Frontend:** `npm run build` genera la carpeta `dist/`. Comprímala como `sigein-frontend-v1.0.zip`; se publica en cualquier servidor web estático (Nginx, Apache, Netlify o Vercel).
-- **Backend:** comprima la carpeta `sigein-backend` **sin** `node_modules` ni `.env` como `sigein-backend-v1.0.zip`. Incluya `.env.example` y las migraciones de `prisma/migrations`. En producción se ejecuta con `npm start` y un administrador de procesos como PM2.
+- **Frontend:** `npm run build` genera la carpeta `dist/`. Comprímala como `inducta-frontend-v1.0.zip`; se publica en cualquier servidor web estático (Nginx, Apache, Netlify o Vercel).
+- **Backend:** comprima la carpeta `sigein-backend` **sin** `node_modules` ni `.env` como `inducta-backend-v1.0.zip`. Incluya `.env.example` y las migraciones de `prisma/migrations`. En producción se ejecuta con `npm start` y un administrador de procesos como PM2.
 
 ### 1.8 Estructura del proyecto
 
@@ -194,4 +194,4 @@ Cualquier persona, sin iniciar sesión, puede escanear el **código QR** del cer
 | Un módulo aparece con candado | Complete el módulo anterior y apruebe su evaluación. |
 | Me quedé sin intentos | Su jefe de área recibe un aviso automático; comuníquese con Talento Humano. |
 | El video o el PDF no carga | Use el enlace "Abrirlo en otra pestaña" debajo del contenido o revise su conexión. |
-| `Iniciar SIGEIN.bat` no abre la página | Espere unos segundos y recargue. Revise en las ventanas "Backend" y "Frontend" si hay algún error. |
+| `Iniciar Inducta.bat` no abre la página | Espere unos segundos y recargue. Revise en las ventanas "Backend" y "Frontend" si hay algún error. |

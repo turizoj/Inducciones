@@ -110,9 +110,9 @@ function tokenDeBienvenida() {
 function enviarBienvenida(usuario, token) {
   return enviarCorreo({
     para: usuario.email,
-    asunto: 'Bienvenido a SIGEIN',
+    asunto: 'Bienvenido a Inducta',
     texto:
-      `Hola ${usuario.nombres}, se creó su usuario en SIGEIN, el sistema de inducciones de la empresa.\n` +
+      `Hola ${usuario.nombres}, se creó su usuario en Inducta, el sistema de inducciones de la empresa.\n` +
       `Para crear su contraseña ingrese a:\n${frontendUrl}/restablecer?token=${token}&bienvenida=1\n` +
       `El enlace vence en ${HORAS_ENLACE_BIENVENIDA} horas. Luego inicie sesión con el correo ${usuario.email}.`,
   });

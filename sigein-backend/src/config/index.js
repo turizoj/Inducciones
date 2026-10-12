@@ -13,7 +13,7 @@ module.exports = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '8h',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
   // Nombre que aparece en los certificados
-  empresaNombre: process.env.EMPRESA_NOMBRE || 'SIGEIN',
+  empresaNombre: process.env.EMPRESA_NOMBRE || 'Inducta',
   // Servidor de correo (opcional). Sin SMTP_HOST, los correos se muestran en la consola.
   smtp: {
     host: process.env.SMTP_HOST || '',

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const CLAVE_TOKEN = 'sigein_token'
+export const CLAVE_TOKEN = 'inducta_token'
 
 // Cliente HTTP que envía el token JWT en cada petición a la API
 const cliente = axios.create({

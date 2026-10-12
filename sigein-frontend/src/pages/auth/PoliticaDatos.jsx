@@ -45,7 +45,7 @@ export default function PoliticaDatos() {
         <div className="mt-6 max-h-72 space-y-3 overflow-y-auto rounded-lg border border-slate-200 bg-fondo p-4 text-sm leading-relaxed text-slate-600">
           <p>
             En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, la empresa informa que los datos personales
-            registrados en SIGEIN (nombre, documento, correo, teléfono, área, cargo, avance, notas y certificados) se usan
+            registrados en Inducta (nombre, documento, correo, teléfono, área, cargo, avance, notas y certificados) se usan
             únicamente para gestionar su proceso de inducción y dejar evidencia de su cumplimiento ante los entes de control.
           </p>
           <p>

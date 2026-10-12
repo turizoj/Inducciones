@@ -6,7 +6,7 @@ export default function Logo({ claro = false }) {
       <span className={`grid size-9 place-items-center rounded-lg ${claro ? 'bg-white/15' : 'bg-primario'}`}>
         <GraduationCap className="size-5 text-white" aria-hidden="true" />
       </span>
-      <span className={`text-lg font-bold tracking-tight ${claro ? 'text-white' : 'text-primario'}`}>SIGEIN</span>
+      <span className={`text-lg font-bold tracking-tight ${claro ? 'text-white' : 'text-primario'}`}>Inducta</span>
     </div>
   )
 }

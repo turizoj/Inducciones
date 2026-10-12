@@ -23,9 +23,9 @@ async function main() {
   });
 
   const usuarios = [
-    { documento: '1000000001', nombres: 'Admin', apellidos: 'SIGEIN', email: 'admin@sigein.com', password: 'Admin123*', rol: 'Administrador' },
-    { documento: '1000000002', nombres: 'Laura', apellidos: 'Gómez', email: 'jefe@sigein.com', password: 'Jefe123*', rol: 'Jefe de área' },
-    { documento: '1000000003', nombres: 'Carlos', apellidos: 'Pérez', email: 'colaborador@sigein.com', password: 'Colab123*', rol: 'Colaborador' },
+    { documento: '1000000001', nombres: 'Admin', apellidos: 'Inducta', email: 'admin@inducta.com', password: 'Admin123*', rol: 'Administrador' },
+    { documento: '1000000002', nombres: 'Laura', apellidos: 'Gómez', email: 'jefe@inducta.com', password: 'Jefe123*', rol: 'Jefe de área' },
+    { documento: '1000000003', nombres: 'Carlos', apellidos: 'Pérez', email: 'colaborador@inducta.com', password: 'Colab123*', rol: 'Colaborador' },
   ];
 
   for (const u of usuarios) {
@@ -45,7 +45,7 @@ async function main() {
     });
   }
 
-  const jefe = await prisma.usuario.findUnique({ where: { email: 'jefe@sigein.com' } });
+  const jefe = await prisma.usuario.findUnique({ where: { email: 'jefe@inducta.com' } });
   await prisma.area.update({ where: { id: area.id }, data: { jefeId: jefe.id } });
 
   console.log('Datos iniciales creados.');

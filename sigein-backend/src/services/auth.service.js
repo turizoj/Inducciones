@@ -93,7 +93,7 @@ async function solicitarRecuperacion(email) {
 
   await enviarCorreo({
     para: email,
-    asunto: 'SIGEIN - Recuperación de contraseña',
+    asunto: 'Inducta - Recuperación de contraseña',
     texto: `Para crear una nueva contraseña ingrese a:\n${frontendUrl}/restablecer?token=${token}\nEl enlace vence en ${MINUTOS_ENLACE} minutos.`,
   });
 }

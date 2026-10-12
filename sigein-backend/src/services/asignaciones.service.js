@@ -190,7 +190,7 @@ async function crear({ programaId, modo, usuarioIds, areaId, cargoId, fechaLimit
   for (const u of nuevos) {
     await enviarCorreo({
       para: u.email,
-      asunto: `SIGEIN - Nueva inducción: ${programa.titulo}`,
+      asunto: `Inducta - Nueva inducción: ${programa.titulo}`,
       texto:
         `Hola ${u.nombres}, se le asignó el programa de inducción "${programa.titulo}".\n` +
         `Fecha límite: ${textoLimite}.\nIngrese a ${frontendUrl}/mis-inducciones para empezar.`,

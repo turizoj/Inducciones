@@ -1,4 +1,4 @@
-// Modelo de datos de SIGEIN (documento del proyecto, secciones 17 y 18)
+// Modelo de datos de Inducta (documento del proyecto, secciones 17 y 18)
 
 generator client {
   provider = "prisma-client-js"

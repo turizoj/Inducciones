@@ -20,7 +20,7 @@ function descargarPlantilla(cargo) {
   const texto = '﻿' + filas.map((f) => f.join(';')).join('\r\n')
   const enlace = document.createElement('a')
   enlace.href = URL.createObjectURL(new Blob([texto], { type: 'text/csv;charset=utf-8' }))
-  enlace.download = 'plantilla_usuarios_sigein.csv'
+  enlace.download = 'plantilla_usuarios_inducta.csv'
   enlace.click()
   URL.revokeObjectURL(enlace.href)
 }

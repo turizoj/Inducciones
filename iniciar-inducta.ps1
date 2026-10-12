@@ -1,4 +1,4 @@
-﻿# Enciende MySQL, el backend y el frontend de SIGEIN.
+﻿# Enciende MySQL, el backend y el frontend de Inducta.
 # Uso: clic derecho sobre este archivo > "Ejecutar con PowerShell"
 
 $raiz = $PSScriptRoot

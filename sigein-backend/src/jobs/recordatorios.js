@@ -40,7 +40,7 @@ async function enviarRecordatorios() {
     ]);
     await enviarCorreo({
       para: a.usuario.email,
-      asunto: `SIGEIN - Su inducción vence ${cuando}`,
+      asunto: `Inducta - Su inducción vence ${cuando}`,
       texto:
         `Hola ${a.usuario.nombres}, le recordamos que la inducción "${a.programa.titulo}" vence ${cuando} (${limite}).\n` +
         `Continúe en ${frontendUrl}/mis-inducciones`,

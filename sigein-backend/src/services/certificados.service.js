@@ -13,7 +13,7 @@ const ALFABETO = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 function nuevoCodigo() {
   const bytes = crypto.randomBytes(8);
   const parte = [...bytes].map((b) => ALFABETO[b % ALFABETO.length]).join('');
-  return `SIG-${new Date().getFullYear()}-${parte}`;
+  return `IND-${new Date().getFullYear()}-${parte}`;
 }
 
 const urlVerificacion = (codigo) => `${frontendUrl}/verificar/${codigo}`;
@@ -45,7 +45,7 @@ async function emitir(asignacionId) {
   });
   await enviarCorreo({
     para: usuario.email,
-    asunto: `SIGEIN - Certificado de ${programa.titulo}`,
+    asunto: `Inducta - Certificado de ${programa.titulo}`,
     texto:
       `Hola ${usuario.nombres}, felicitaciones por completar "${programa.titulo}".\n` +
       `Descargue su certificado en ${frontendUrl}/certificados\n` +
