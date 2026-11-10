@@ -32,5 +32,6 @@ router.post('/importar', validar(esquemaImportar), controller.importar);
 router.get('/:id', controller.obtener);
 router.put('/:id', validar(esquemaUsuario), controller.actualizar);
 router.patch('/:id/estado', validar(esquemaEstado), controller.cambiarEstado);
+router.delete('/:id', controller.eliminar);
 
 module.exports = router;

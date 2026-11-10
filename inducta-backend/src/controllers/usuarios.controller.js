@@ -41,6 +41,15 @@ async function cambiarEstado(req, res, next) {
   }
 }
 
+async function eliminar(req, res, next) {
+  try {
+    await usuariosService.eliminar(idDeRuta(req.params.id), req.usuario.id);
+    res.json({ mensaje: 'Usuario eliminado' });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function importar(req, res, next) {
   try {
     res.json(await usuariosService.importar(req.body.csv));
@@ -57,4 +66,4 @@ async function roles(req, res, next) {
   }
 }
 
-module.exports = { listar, obtener, crear, actualizar, cambiarEstado, importar, roles };
+module.exports = { listar, obtener, crear, actualizar, cambiarEstado, eliminar, importar, roles };

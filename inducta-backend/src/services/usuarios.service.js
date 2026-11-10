@@ -154,6 +154,27 @@ async function cambiarEstado(id, estado, idActor) {
   return formatear(await prisma.usuario.update({ where: { id }, data: { estado }, include: incluir }));
 }
 
+// HU-03: solo se elimina un usuario sin historial (por ejemplo, creado por error); si ya tiene
+// inducciones, asignaciones o programas, se inactiva para no perder la trazabilidad
+async function eliminar(id, idActor) {
+  if (id === idActor) throw new HttpError(400, 'No puede eliminar su propio usuario');
+  const usuario = await prisma.usuario.findUnique({
+    where: { id },
+    include: { _count: { select: { asignaciones: true, asignacionesHechas: true, programasCreados: true, areasDirigidas: true } } },
+  });
+  if (!usuario) throw new HttpError(404, 'Usuario no encontrado');
+
+  const { asignaciones, asignacionesHechas, programasCreados, areasDirigidas } = usuario._count;
+  if (areasDirigidas > 0) {
+    throw new HttpError(409, 'Este usuario es jefe de un área. Asigne otro jefe al área antes de eliminarlo, o inactívelo.');
+  }
+  if (asignaciones + asignacionesHechas + programasCreados > 0) {
+    throw new HttpError(409, 'Este usuario ya tiene historial (inducciones, asignaciones o programas). No se puede eliminar; puede inactivarlo.');
+  }
+  // Sus notificaciones se borran en cascada
+  await prisma.usuario.delete({ where: { id } });
+}
+
 // Nombres de columna aceptados en el CSV (sin tildes, espacios ni guiones)
 const COLUMNAS = {
   documento: 'documento',
@@ -262,4 +283,4 @@ async function listarRoles() {
   return prisma.rol.findMany({ orderBy: { id: 'asc' } });
 }
 
-module.exports = { listar, obtener, crear, actualizar, cambiarEstado, importar, listarRoles };
+module.exports = { listar, obtener, crear, actualizar, cambiarEstado, eliminar, importar, listarRoles };

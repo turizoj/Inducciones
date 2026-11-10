@@ -181,7 +181,7 @@ inducta-frontend/src/
 ### 2.3 Administrador (Talento Humano)
 
 - **Áreas y cargos:** cree la estructura de la empresa antes de registrar usuarios. Un área o un cargo con usuarios no se elimina; se inactiva.
-- **Usuarios:** presione **Nuevo usuario** o **Cargar CSV** (descargue antes la plantilla). Cada usuario recibe un correo de bienvenida.
+- **Usuarios:** presione **Nuevo usuario** o **Cargar CSV** (descargue antes la plantilla). Cada usuario recibe un correo de bienvenida con el enlace para crear su contraseña (vence en 72 horas). Un usuario creado por error, sin inducciones ni historial, se puede **eliminar**; si ya tiene historial, se **inactiva**.
 - **Programas:** presione **Nuevo programa**, agregue módulos, cargue los contenidos (video, PDF, imagen, texto o enlace) y, si quiere, cree la **evaluación** de cada módulo. Ordene módulos y contenidos arrastrándolos. Cuando esté listo, presione **Publicar**.
 - **Asignaciones:** elija el programa, a quién se asigna (personas, un área o un cargo) y la fecha límite. Si alguien ya tiene el programa activo, se omite.
 - **Reportes:** combine los filtros (área, programa, estado y fechas) y presione **Exportar a Excel** o **Exportar a PDF**. El archivo incluye los filtros aplicados.

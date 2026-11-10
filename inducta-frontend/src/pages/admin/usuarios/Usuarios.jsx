@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Pencil, Plus, Power, Upload } from 'lucide-react'
+import { Pencil, Plus, Power, Trash2, Upload } from 'lucide-react'
 import Alerta from '../../../components/Alerta'
 import Boton from '../../../components/Boton'
 import BotonIcono from '../../../components/BotonIcono'
@@ -14,7 +14,7 @@ import useAuth from '../../../hooks/useAuth'
 import useAviso from '../../../hooks/useAviso'
 import useConfirmacion from '../../../hooks/useConfirmacion'
 import useRetraso from '../../../hooks/useRetraso'
-import { cambiarEstadoUsuario, listarAreas, listarRoles, listarUsuarios } from '../../../api/admin'
+import { cambiarEstadoUsuario, eliminarUsuario, listarAreas, listarRoles, listarUsuarios } from '../../../api/admin'
 import FormularioUsuario from './FormularioUsuario'
 import ImportarUsuarios from './ImportarUsuarios'
 
@@ -70,6 +70,22 @@ export default function Usuarios() {
         await cambiarEstadoUsuario({ id: u.id, estado: nuevo })
         await queryClient.invalidateQueries()
         mostrarAviso(`${nombre} quedó ${nuevo}.`)
+      },
+    })
+  }
+
+  // HU-03: un usuario sin historial (por ejemplo, creado por error) se puede eliminar
+  function eliminar(u) {
+    const nombre = `${u.nombres} ${u.apellidos}`
+    pedir({
+      titulo: 'Eliminar usuario',
+      mensaje: `¿Desea eliminar a ${nombre}? Esta acción no se puede deshacer. Solo es posible si no tiene inducciones ni historial; en ese caso, inactívelo.`,
+      textoConfirmar: 'Eliminar',
+      peligro: true,
+      ejecutar: async () => {
+        await eliminarUsuario(u.id)
+        await queryClient.invalidateQueries()
+        mostrarAviso(`${nombre} fue eliminado.`)
       },
     })
   }
@@ -184,6 +200,13 @@ export default function Usuarios() {
                     texto={u.id === yo.id ? 'No puede inactivar su propio usuario' : u.estado === 'activo' ? 'Inactivar' : 'Activar'}
                     disabled={u.id === yo.id}
                     onClick={() => cambiarEstado(u)}
+                  />
+                  <BotonIcono
+                    icono={Trash2}
+                    texto={u.id === yo.id ? 'No puede eliminar su propio usuario' : 'Eliminar'}
+                    peligro
+                    disabled={u.id === yo.id}
+                    onClick={() => eliminar(u)}
                   />
                 </div>
               </td>

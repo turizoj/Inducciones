@@ -22,6 +22,11 @@ export async function cambiarEstadoUsuario({ id, estado }) {
   return data
 }
 
+export async function eliminarUsuario(id) {
+  const { data } = await cliente.delete(`/usuarios/${id}`)
+  return data
+}
+
 export async function importarUsuarios(csv) {
   const { data } = await cliente.post('/usuarios/importar', { csv })
   return data
