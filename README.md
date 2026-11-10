@@ -4,8 +4,8 @@ Inducta permite a Talento Humano crear programas de inducción por módulos, car
 
 | Parte | Tecnologías |
 |---|---|
-| Frontend (`sigein-frontend`) | React 19, Vite, Tailwind CSS, React Router, TanStack Query, React Hook Form + Zod, dnd-kit, TipTap |
-| Backend (`sigein-backend`) | Node.js, Express 5, Prisma, MySQL 8, JWT, bcrypt, Zod, Multer, PDFKit, ExcelJS |
+| Frontend (`inducta-frontend`) | React 19, Vite, Tailwind CSS, React Router, TanStack Query, React Hook Form + Zod, dnd-kit, TipTap |
+| Backend (`inducta-backend`) | Node.js, Express 5, Prisma, MySQL 8, JWT, bcrypt, Zod, Multer, PDFKit, ExcelJS |
 
 ---
 
@@ -21,11 +21,11 @@ Inducta permite a Talento Humano crear programas de inducción por módulos, car
 
 1. Cree la base de datos vacía en MySQL:
    ```sql
-   CREATE DATABASE sigein_db CHARACTER SET utf8mb4;
+   CREATE DATABASE inducta_db CHARACTER SET utf8mb4;
    ```
 2. Configure y prepare el **backend**:
    ```bash
-   cd sigein-backend
+   cd inducta-backend
    copy .env.example .env      # en macOS o Linux: cp .env.example .env
    ```
    Complete en `.env` los datos de conexión. Luego ejecute:
@@ -36,16 +36,16 @@ Inducta permite a Talento Humano crear programas de inducción por módulos, car
    ```
 3. Configure el **frontend**:
    ```bash
-   cd ../sigein-frontend
+   cd ../inducta-frontend
    copy .env.example .env      # VITE_API_URL=http://localhost:4000/api
    npm install
    ```
 
-Variables del backend (`sigein-backend/.env`):
+Variables del backend (`inducta-backend/.env`):
 
 | Variable | Para qué sirve | Ejemplo |
 |---|---|---|
-| `DATABASE_URL` | Conexión a MySQL | `mysql://usuario:clave@localhost:3306/sigein_db` |
+| `DATABASE_URL` | Conexión a MySQL | `mysql://usuario:clave@localhost:3306/inducta_db` |
 | `JWT_SECRET` | Clave para firmar las sesiones (larga y secreta) | `una-clave-larga-y-aleatoria` |
 | `JWT_EXPIRES_IN` | Duración de la sesión | `8h` |
 | `PORT` | Puerto de la API | `4000` |
@@ -58,7 +58,7 @@ Variables del backend (`sigein-backend/.env`):
 ### 1.3 Encender el sistema
 
 - **En Windows, con doble clic:** ejecute `Iniciar Inducta.bat`. Enciende MySQL, el backend y el frontend, y abre el navegador. Para apagar, cierre las ventanas "Backend" y "Frontend".
-- **Manualmente:** en dos terminales, `npm run dev` dentro de `sigein-backend` (puerto 4000) y dentro de `sigein-frontend` (puerto 5173).
+- **Manualmente:** en dos terminales, `npm run dev` dentro de `inducta-backend` (puerto 4000) y dentro de `inducta-frontend` (puerto 5173).
 
 Usuarios de prueba que crea `npx prisma db seed`:
 
@@ -81,9 +81,9 @@ Si un correo no se puede enviar, el error queda en la consola y la acción princ
 ### 1.5 Pruebas
 
 ```bash
-cd sigein-backend
+cd inducta-backend
 npm test          # pruebas automáticas: CSV, avance y bloqueo de módulos, validaciones
-cd ../sigein-frontend
+cd ../inducta-frontend
 npm run lint      # revisión del código del frontend
 npm run build     # compila el frontend en la carpeta dist/
 ```
@@ -118,12 +118,12 @@ Códigos de respuesta: **200/201** correcto o creado · **400** datos inválidos
 ### 1.7 Empaquetado para la entrega
 
 - **Frontend:** `npm run build` genera la carpeta `dist/`. Comprímala como `inducta-frontend-v1.0.zip`; se publica en cualquier servidor web estático (Nginx, Apache, Netlify o Vercel).
-- **Backend:** comprima la carpeta `sigein-backend` **sin** `node_modules` ni `.env` como `inducta-backend-v1.0.zip`. Incluya `.env.example` y las migraciones de `prisma/migrations`. En producción se ejecuta con `npm start` y un administrador de procesos como PM2.
+- **Backend:** comprima la carpeta `inducta-backend` **sin** `node_modules` ni `.env` como `inducta-backend-v1.0.zip`. Incluya `.env.example` y las migraciones de `prisma/migrations`. En producción se ejecuta con `npm start` y un administrador de procesos como PM2.
 
 ### 1.8 Estructura del proyecto
 
 ```
-sigein-backend/
+inducta-backend/
 ├── prisma/            # modelo de datos, migraciones y datos iniciales
 ├── src/
 │   ├── config/        # variables de entorno y conexión
@@ -137,7 +137,7 @@ sigein-backend/
 ├── test/              # pruebas automáticas
 └── uploads/           # archivos cargados (no se suben a Git)
 
-sigein-frontend/src/
+inducta-frontend/src/
 ├── api/               # llamadas a la API
 ├── components/        # botones, tablas, ventanas, campana, editor de texto…
 ├── layouts/           # estructura del panel y de las pantallas de acceso
