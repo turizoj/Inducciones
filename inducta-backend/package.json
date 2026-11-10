@@ -9,6 +9,7 @@
     "postinstall": "prisma generate",
     "migrar": "prisma migrate dev",
     "semilla": "prisma db seed",
+    "demo": "node demo/cargar-demo.mjs",
     "test": "node --test"
   },
   "prisma": {

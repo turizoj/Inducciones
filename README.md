@@ -68,6 +68,15 @@ Usuarios de prueba que crea `npx prisma db seed`:
 | Jefe de área | `jefe@inducta.com` | `Jefe123*` |
 | Colaborador | `colaborador@inducta.com` | `Colab123*` |
 
+**Datos de demostración (opcional).** Con el backend encendido, ejecute `npm run demo` dentro de `inducta-backend`. Carga la inducción completa de una empresa ficticia, *Andina Logística S.A.S.*:
+
+- 4 áreas, 6 cargos y 7 personas (contraseña `Colab123*`; el jefe de Operaciones, `felipe.rios@inducta.com`, usa `Jefe123*`).
+- 4 programas publicados con portada: *Bienvenido a Andina Logística*, *Seguridad y Salud en el Trabajo*, *Protección de datos y seguridad digital* e *Inducción al cargo: Auxiliar de bodega*.
+- 10 módulos con videos de YouTube, documentos PDF ilustrados (`demo/material/`), textos, enlaces y una evaluación por módulo.
+- Asignaciones por área y por cargo, con avance variado: completadas, en curso, pendientes, una vencida y certificados emitidos.
+
+Se puede ejecutar varias veces sin duplicar datos. Para que los certificados muestren el nombre de la empresa, use `EMPRESA_NOMBRE="Andina Logística S.A.S."` en el `.env`.
+
 ### 1.4 Correos
 
 Inducta envía correos de bienvenida, recuperación de contraseña, asignaciones, recordatorios de vencimiento y certificados.
