@@ -1,8 +1,9 @@
-import { AlignLeft, FileText, Link2, PlayCircle } from 'lucide-react'
+import { AlignLeft, FileText, Image, Link2, PlayCircle } from 'lucide-react'
 
 // Ícono y descripción corta de cada tipo de contenido (RF-10)
 export function describirContenido(c) {
   if (c.tipo === 'texto') return { icono: AlignLeft, detalle: 'Texto', color: 'bg-slate-100 text-slate-600' }
+  if (c.tipo === 'imagen') return { icono: Image, detalle: 'Imagen', color: 'bg-exito/10 text-exito' }
   if (c.tipo === 'pdf') return { icono: FileText, detalle: 'Documento PDF', color: 'bg-error/10 text-error' }
   if (c.tipo === 'enlace') {
     let sitio = c.url

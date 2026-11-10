@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import {
   Award,
@@ -7,6 +7,7 @@ import {
   Building2,
   ClipboardList,
   LayoutDashboard,
+  LoaderCircle,
   LogOut,
   Menu,
   Users,
@@ -105,7 +106,17 @@ export default function PanelLayout() {
       </header>
 
       <main className="p-4 sm:p-6 lg:p-8">
-        <Outlet />
+        {/* Cada pantalla se descarga al abrirla; mientras tanto el menú sigue visible */}
+        <Suspense
+          fallback={
+            <div className="flex justify-center py-20" role="status">
+              <LoaderCircle className="size-7 animate-spin text-primario" aria-hidden="true" />
+              <span className="sr-only">Cargando…</span>
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   )

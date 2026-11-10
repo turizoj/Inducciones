@@ -90,6 +90,7 @@ const unica = (enunciado, opciones, correcta) => ({ enunciado, tipo: 'unica', op
 const multiple = (enunciado, opciones, correctas) => ({ enunciado, tipo: 'multiple', opciones: opciones.map((texto, i) => ({ texto, esCorrecta: correctas.includes(i) })) });
 const video = (titulo, id) => ({ titulo, tipo: 'video', url: `https://www.youtube.com/watch?v=${id}` });
 const pdf = (titulo, nombre) => ({ titulo, tipo: 'pdf', archivo: nombre });
+const imagen = (titulo, nombre) => ({ titulo, tipo: 'imagen', archivo: nombre });
 const enlace = (titulo, url) => ({ titulo, tipo: 'enlace', url });
 const texto = (titulo, html) => ({ titulo, tipo: 'texto', texto: html });
 
@@ -104,6 +105,7 @@ const PROGRAMAS = [
         contenidos: [
           texto('Mensaje de bienvenida', `<h2>¡Bienvenido a la familia Andina!</h2><p>Hoy empiezas a hacer parte de un equipo de <strong>320 personas</strong> que todos los días conecta a 180 empresas con sus clientes en 12 ciudades de Colombia.</p><p>Esta inducción te va a mostrar quiénes somos, cómo trabajamos y qué esperamos de ti. Tómate tu tiempo: al final de cada módulo hay una evaluación corta.</p><blockquote>«Ningún envío vale más que una persona. Cuídate y cuida a tu equipo.» — Gerencia General</blockquote>`),
           pdf('Conócenos: historia, valores y organigrama', 'conocenos-andina-logistica.pdf'),
+          imagen('Organigrama de Andina Logística', 'organigrama-andina-logistica.png'),
           video('Video: el trabajo en equipo (corto «El Puente»)', 'gQiaAb6VGt8'),
         ],
         evaluacion: { notaMinima: 3.5, intentosMax: 3, tiempoLimiteMin: 10, preguntas: [
@@ -175,6 +177,7 @@ const PROGRAMAS = [
       {
         titulo: 'Plan de emergencias', descripcion: 'Rutas de evacuación, punto de encuentro y brigada.',
         contenidos: [
+          imagen('Plano de evacuación · Sede Medellín', 'plano-de-evacuacion-sede-medellin.png'),
           pdf('Plan de emergencias · Sede Medellín', 'plan-de-emergencias-sede-medellin.pdf'),
           video('¿Sabes qué hacer en una emergencia?', 'iUZefC7cQVg'),
           texto('Brigada de emergencias', `<p>Cada piso tiene un <strong>brigadista</strong> identificado con chaleco rojo. En una evacuación, sigue sus instrucciones.</p><ul><li><strong>Línea nacional de emergencias:</strong> 123</li><li><strong>Brigada interna:</strong> extensión 911</li><li><strong>Simulacro:</strong> se realiza dos veces al año; participar es obligatorio.</li></ul>`),
@@ -211,6 +214,7 @@ const PROGRAMAS = [
         contenidos: [
           video('Ciberseguridad en la empresa', 'uhVAklKRM54'),
           pdf('10 reglas de seguridad digital', '10-reglas-de-seguridad-digital.pdf'),
+          imagen('¿Cómo reconocer un correo de phishing?', 'como-reconocer-un-correo-de-phishing.png'),
           video('Cómo crear contraseñas seguras', 'Mo_iddRc16k'),
         ],
         evaluacion: { notaMinima: 3.5, intentosMax: 3, tiempoLimiteMin: 8, preguntas: [
@@ -231,6 +235,7 @@ const PROGRAMAS = [
         titulo: 'Manipulación segura de cargas', descripcion: 'Técnica correcta para levantar y transportar.',
         contenidos: [
           video('Manipulación manual de cargas: recomendaciones (INSST)', '3BP62XEoEUI'),
+          imagen('Levantamiento seguro en 4 pasos', 'levantamiento-seguro-de-cargas.png'),
           pdf('Manual del auxiliar de bodega', 'manual-del-auxiliar-de-bodega.pdf'),
           video('Cómo manipular cargas correctamente', 'TWglucdnMEM'),
         ],
@@ -274,7 +279,7 @@ async function programas() {
         fc.set('tipo', c.tipo);
         if (c.url) fc.set('url', c.url);
         if (c.texto) fc.set('texto', c.texto);
-        if (c.archivo) fc.set('archivo', archivo(c.archivo, 'application/pdf'), c.archivo);
+        if (c.archivo) fc.set('archivo', archivo(c.archivo, c.tipo === 'imagen' ? 'image/png' : 'application/pdf'), c.archivo);
         await api(t, 'POST', `/modulos/${mod.id}/contenidos`, fc, true);
       }
       await api(t, 'PUT', `/modulos/${mod.id}/evaluacion`, m.evaluacion);

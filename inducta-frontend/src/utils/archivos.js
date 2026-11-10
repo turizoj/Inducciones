@@ -9,5 +9,6 @@ export function urlArchivo(ruta) {
 
 export const MB = 1024 * 1024
 
-// Deben coincidir con los límites del backend (HU-06)
-export const LIMITES = { pdf: 20 * MB, video: 100 * MB, imagen: 2 * MB }
+// Deben coincidir con los límites del backend (HU-06).
+// "imagen" es la portada del programa; "imagenContenido", una imagen dentro de un módulo.
+export const LIMITES = { pdf: 20 * MB, video: 100 * MB, imagen: 2 * MB, imagenContenido: 5 * MB }

@@ -10,6 +10,7 @@
     "migrar": "prisma migrate dev",
     "semilla": "prisma db seed",
     "demo": "node demo/cargar-demo.mjs",
+    "demo:reiniciar": "node demo/reiniciar-avance.mjs",
     "test": "node --test"
   },
   "prisma": {

@@ -20,11 +20,11 @@ const subirImagen = subirArchivo({
   limite: LIMITES.imagen,
 });
 
-// El límite general es el del video; el de los PDF (20 MB) se revisa en el servicio
+// El límite general es el del video; el de los PDF (20 MB) y el de las imágenes (5 MB) se revisan en el servicio
 const subirContenido = subirArchivo({
   carpeta: 'contenidos',
   campo: 'archivo',
-  tipos: ['application/pdf', 'video/mp4'],
+  tipos: ['application/pdf', 'video/mp4', 'image/jpeg', 'image/png', 'image/webp'],
   limite: LIMITES.video,
 });
 

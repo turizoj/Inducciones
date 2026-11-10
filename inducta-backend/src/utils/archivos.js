@@ -7,8 +7,9 @@ const { HttpError } = require('./errores');
 const CARPETA_UPLOADS = path.join(__dirname, '..', '..', 'uploads');
 const MB = 1024 * 1024;
 
-// HU-06: los PDF no superan 20 MB; los MP4 pesados deberían ir como enlace de YouTube o Vimeo
-const LIMITES = { pdf: 20 * MB, video: 100 * MB, imagen: 2 * MB };
+// HU-06: los PDF no superan 20 MB; los MP4 pesados deberían ir como enlace de YouTube o Vimeo.
+// "imagen" es la portada del programa; "imagenContenido", una imagen dentro de un módulo.
+const LIMITES = { pdf: 20 * MB, video: 100 * MB, imagen: 2 * MB, imagenContenido: 5 * MB };
 
 const EXTENSIONES = {
   'application/pdf': '.pdf',

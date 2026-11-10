@@ -29,7 +29,7 @@ const esquemaModulo = z.object({
 // Llega como formulario con archivo (multipart), por eso todos los campos son texto
 const esquemaContenido = z.object({
   titulo: z.string().trim().min(2, 'Escriba el título del contenido').max(150, 'Máximo 150 caracteres'),
-  tipo: z.enum(['video', 'pdf', 'texto', 'enlace'], { error: 'Tipo de contenido no válido' }),
+  tipo: z.enum(['video', 'pdf', 'texto', 'enlace', 'imagen'], { error: 'Tipo de contenido no válido' }),
   url: opcional(z.string().trim().max(255, 'El enlace es demasiado largo (máximo 255 caracteres)')),
   texto: opcional(z.string().max(100000, 'El texto es demasiado largo')),
 });

@@ -9,6 +9,7 @@ const CARPETA = 'contenidos';
 
 // HU-06: los videos se registran como enlace de YouTube o Vimeo, o como archivo MP4
 const VIDEO_PERMITIDO = /^https:\/\/(www\.|m\.|player\.)?(youtube\.com|youtu\.be|vimeo\.com)\//i;
+const IMAGEN_PERMITIDA = ['image/jpeg', 'image/png', 'image/webp'];
 
 // Etiquetas que acepta el texto enriquecido; todo lo demás (scripts, estilos, iframes) se elimina
 const OPCIONES_HTML = {
@@ -58,6 +59,22 @@ function prepararDatos({ titulo, tipo, url, texto }, archivo, actual) {
     if (conservaArchivo) return { titulo, tipo, url: actual.url, texto: null };
     throw new HttpError(400, 'Seleccione el archivo PDF');
   }
+
+  // Imagen: infografías, organigramas, planos… JPG, PNG o WEBP de máximo 5 MB
+  if (tipo === 'imagen') {
+    if (archivo) {
+      if (!IMAGEN_PERMITIDA.includes(archivo.mimetype)) throw new HttpError(400, 'La imagen debe ser JPG, PNG o WEBP');
+      if (archivo.size > LIMITES.imagenContenido) {
+        throw new HttpError(413, `La imagen supera el máximo de ${LIMITES.imagenContenido / MB} MB`);
+      }
+      verificarTipoReal(archivo, 'archivo de imagen JPG, PNG o WEBP');
+      return { titulo, tipo, url: rutaPublica(archivo, CARPETA), texto: null };
+    }
+    if (conservaArchivo) return { titulo, tipo, url: actual.url, texto: null };
+    throw new HttpError(400, 'Seleccione la imagen');
+  }
+
+  if (archivo && archivo.mimetype.startsWith('image/')) throw new HttpError(400, 'Para subir una imagen elija el tipo «Imagen»');
 
   // Video: archivo MP4 o enlace de YouTube / Vimeo
   if (archivo) {

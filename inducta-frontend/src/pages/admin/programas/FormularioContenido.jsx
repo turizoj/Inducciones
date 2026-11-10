@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AlignLeft, FileText, Link2, PlayCircle, Upload } from 'lucide-react'
+import { AlignLeft, FileText, Image, Link2, PlayCircle, Upload } from 'lucide-react'
 import Modal from '../../../components/Modal'
 import CampoTexto from '../../../components/CampoTexto'
 import EditorTexto from '../../../components/EditorTexto'
@@ -13,6 +13,7 @@ import { LIMITES, MB, urlArchivo } from '../../../utils/archivos'
 const TIPOS = [
   { id: 'video', texto: 'Video', icono: PlayCircle },
   { id: 'pdf', texto: 'PDF', icono: FileText },
+  { id: 'imagen', texto: 'Imagen', icono: Image },
   { id: 'texto', texto: 'Texto', icono: AlignLeft },
   { id: 'enlace', texto: 'Enlace', icono: Link2 },
 ]
@@ -20,9 +21,22 @@ const TIPOS = [
 // Deben coincidir con las reglas del backend (HU-06)
 const VIDEO_PERMITIDO = /^https:\/\/(www\.|m\.|player\.)?(youtube\.com|youtu\.be|vimeo\.com)\//i
 
+// Archivos que acepta cada tipo de contenido
+const ARCHIVOS = {
+  pdf: { mimes: ['application/pdf'], accept: 'application/pdf,.pdf', nombre: 'PDF', elegir: 'el PDF', limite: LIMITES.pdf },
+  video: { mimes: ['video/mp4'], accept: 'video/mp4,.mp4', nombre: 'MP4', elegir: 'el video MP4', limite: LIMITES.video },
+  imagen: {
+    mimes: ['image/jpeg', 'image/png', 'image/webp'],
+    accept: 'image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp',
+    nombre: 'JPG, PNG o WEBP',
+    elegir: 'la imagen (JPG, PNG o WEBP)',
+    limite: LIMITES.imagenContenido,
+  },
+}
+
 const esArchivoPropio = (url) => Boolean(url?.startsWith('/uploads/'))
 
-// HU-06: agregar o editar un contenido (video, PDF, texto o enlace)
+// HU-06: agregar o editar un contenido (video, PDF, imagen, texto o enlace)
 export default function FormularioContenido({ moduloId, contenido, onCerrar, onGuardado }) {
   const queryClient = useQueryClient()
   const [tipo, setTipo] = useState(contenido?.tipo ?? 'video')
@@ -36,7 +50,7 @@ export default function FormularioContenido({ moduloId, contenido, onCerrar, onG
 
   // Archivo que ya tiene el contenido y que se conserva si no se elige otro
   const archivoActual = contenido?.tipo === tipo && esArchivoPropio(contenido.url) ? contenido.url : null
-  const llevaArchivo = tipo === 'pdf' || (tipo === 'video' && modoVideo === 'archivo')
+  const llevaArchivo = tipo === 'pdf' || tipo === 'imagen' || (tipo === 'video' && modoVideo === 'archivo')
 
   const mutacion = useMutation({
     mutationFn: guardarContenido,
@@ -61,9 +75,9 @@ export default function FormularioContenido({ moduloId, contenido, onCerrar, onG
     if (tipo === 'enlace' && !/^https?:\/\/\S+$/i.test(url.trim())) e.url = 'Escriba un enlace que empiece por http:// o https://'
     if (tipo === 'texto' && !texto) e.texto = 'Escriba el texto del contenido'
     if (llevaArchivo) {
-      const esperado = tipo === 'pdf' ? { mime: 'application/pdf', nombre: 'PDF', limite: LIMITES.pdf } : { mime: 'video/mp4', nombre: 'MP4', limite: LIMITES.video }
-      if (!archivo && !archivoActual) e.archivo = `Seleccione el archivo ${esperado.nombre}`
-      else if (archivo && archivo.type !== esperado.mime) e.archivo = `El archivo debe ser ${esperado.nombre}`
+      const esperado = ARCHIVOS[tipo]
+      if (!archivo && !archivoActual) e.archivo = `Seleccione ${esperado.elegir}`
+      else if (archivo && !esperado.mimes.includes(archivo.type)) e.archivo = `El archivo debe ser ${esperado.nombre}`
       else if (archivo && archivo.size > esperado.limite) e.archivo = `El archivo supera el máximo de ${esperado.limite / MB} MB`
     }
     setErrores(e)
@@ -94,7 +108,7 @@ export default function FormularioContenido({ moduloId, contenido, onCerrar, onG
 
         <fieldset>
           <legend className="mb-1.5 text-sm font-medium text-slate-700">Tipo de contenido</legend>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
             {TIPOS.map(({ id, texto: nombre, icono: Icono }) => (
               <label
                 key={id}
@@ -159,7 +173,9 @@ export default function FormularioContenido({ moduloId, contenido, onCerrar, onG
           </fieldset>
         )}
 
-        {tipo === 'pdf' && <SelectorArchivo tipo="pdf" archivo={archivo} actual={archivoActual} error={errores.archivo} onElegir={elegirArchivo} />}
+        {(tipo === 'pdf' || tipo === 'imagen') && (
+          <SelectorArchivo tipo={tipo} archivo={archivo} actual={archivoActual} error={errores.archivo} onElegir={elegirArchivo} />
+        )}
 
         {tipo === 'texto' && <EditorTexto etiqueta="Texto" valor={texto} onCambiar={setTexto} error={errores.texto} />}
 
@@ -200,8 +216,8 @@ export default function FormularioContenido({ moduloId, contenido, onCerrar, onG
 }
 
 function SelectorArchivo({ tipo, archivo, actual, error, onElegir }) {
-  const pdf = tipo === 'pdf'
-  const limite = (pdf ? LIMITES.pdf : LIMITES.video) / MB
+  const { accept, elegir, limite: bytes } = ARCHIVOS[tipo]
+  const limite = bytes / MB
   return (
     <div>
       <label
@@ -209,12 +225,12 @@ function SelectorArchivo({ tipo, archivo, actual, error, onElegir }) {
       >
         <Upload className="size-7 text-slate-400" aria-hidden="true" />
         <span className="mt-2 text-sm font-medium text-slate-700">
-          {archivo ? archivo.name : actual ? 'Clic para reemplazar el archivo' : `Clic para elegir el ${pdf ? 'PDF' : 'video MP4'}`}
+          {archivo ? archivo.name : actual ? 'Clic para reemplazar el archivo' : `Clic para elegir ${elegir}`}
         </span>
         <span className="text-xs text-slate-500">
           {archivo ? `${(archivo.size / MB).toFixed(1)} MB` : `Máximo ${limite} MB`}
         </span>
-        <input type="file" accept={pdf ? 'application/pdf,.pdf' : 'video/mp4,.mp4'} className="sr-only" onChange={onElegir} />
+        <input type="file" accept={accept} className="sr-only" onChange={onElegir} />
       </label>
       {actual && !archivo && (
         <p className="mt-1.5 text-xs text-slate-500">

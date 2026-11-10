@@ -4,10 +4,21 @@ import { urlEmbebida } from '../../utils/contenidos'
 
 const claseEnlace = 'inline-flex items-center gap-1.5 text-sm font-medium text-secundario hover:underline'
 
-// CU-10 paso 4: muestra el video, PDF, texto o enlace. Si algo no carga, se ofrece abrirlo aparte (4a).
+// CU-10 paso 4: muestra el video, PDF, imagen, texto o enlace. Si algo no carga, se ofrece abrirlo aparte (4a).
 export default function VistaContenido({ contenido }) {
   const { tipo, titulo } = contenido
   const url = urlArchivo(contenido.url)
+
+  if (tipo === 'imagen') {
+    return (
+      <div className="space-y-2">
+        <img src={url} alt={titulo} className="mx-auto max-h-[70vh] w-auto rounded-lg border border-slate-200 bg-white object-contain" />
+        <a href={url} target="_blank" rel="noopener noreferrer" className={claseEnlace}>
+          Ver la imagen en tamaño completo <ExternalLink className="size-3.5" aria-hidden="true" />
+        </a>
+      </div>
+    )
+  }
 
   if (tipo === 'texto') {
     // El HTML ya viene limpio desde el backend (sanitize-html)

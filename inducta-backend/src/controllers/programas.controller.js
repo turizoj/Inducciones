@@ -21,7 +21,7 @@ module.exports = {
   }),
   subirImagen: accion((req) => {
     if (!req.file) throw new HttpError(400, 'Seleccione una imagen');
-    verificarTipoReal(req.file, 'imagen JPG, PNG o WEBP');
+    verificarTipoReal(req.file, 'archivo de imagen JPG, PNG o WEBP');
     return programasService.cambiarImagen(id(req), rutaPublica(req.file, 'programas'));
   }),
   quitarImagen: accion((req) => programasService.cambiarImagen(id(req), null)),

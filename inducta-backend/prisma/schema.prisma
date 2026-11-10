@@ -30,6 +30,7 @@ enum TipoContenido {
   pdf
   texto
   enlace
+  imagen
 }
 
 enum TipoPregunta {

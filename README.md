@@ -1,6 +1,6 @@
 # Inducta · Sistema Web de Gestión de Inducciones Empresariales
 
-Inducta permite a Talento Humano crear programas de inducción por módulos, cargar contenidos (videos, PDF, textos y enlaces), diseñar evaluaciones, asignar los programas por persona, área o cargo, seguir el avance en tiempo real y emitir certificados verificables con código QR.
+Inducta permite a Talento Humano crear programas de inducción por módulos, cargar contenidos (videos, PDF, imágenes, textos y enlaces), diseñar evaluaciones, asignar los programas por persona, área o cargo, seguir el avance en tiempo real y emitir certificados verificables con código QR.
 
 | Parte | Tecnologías |
 |---|---|
@@ -72,10 +72,12 @@ Usuarios de prueba que crea `npx prisma db seed`:
 
 - 4 áreas, 6 cargos y 7 personas (contraseña `Colab123*`; el jefe de Operaciones, `felipe.rios@inducta.com`, usa `Jefe123*`).
 - 4 programas publicados con portada: *Bienvenido a Andina Logística*, *Seguridad y Salud en el Trabajo*, *Protección de datos y seguridad digital* e *Inducción al cargo: Auxiliar de bodega*.
-- 10 módulos con videos de YouTube, documentos PDF ilustrados (`demo/material/`), textos, enlaces y una evaluación por módulo.
+- 10 módulos con videos de YouTube, documentos PDF e imágenes ilustradas (`demo/material/`), textos, enlaces y una evaluación por módulo.
 - Asignaciones por área y por cargo, con avance variado: completadas, en curso, pendientes, una vencida y certificados emitidos.
 
 Se puede ejecutar varias veces sin duplicar datos. Para que los certificados muestren el nombre de la empresa, use `EMPRESA_NOMBRE="Andina Logística S.A.S."` en el `.env`.
+
+Para recorrer las inducciones desde el inicio (por ejemplo, al grabar una demostración), ejecute `npm run demo:reiniciar`: borra el avance, los intentos y los certificados, deja las asignaciones en «Pendiente» con fecha límite futura y vuelve a pedir la política de datos a jefes y colaboradores.
 
 ### 1.4 Correos
 
@@ -180,7 +182,7 @@ inducta-frontend/src/
 
 - **Áreas y cargos:** cree la estructura de la empresa antes de registrar usuarios. Un área o un cargo con usuarios no se elimina; se inactiva.
 - **Usuarios:** presione **Nuevo usuario** o **Cargar CSV** (descargue antes la plantilla). Cada usuario recibe un correo de bienvenida.
-- **Programas:** presione **Nuevo programa**, agregue módulos, cargue los contenidos y, si quiere, cree la **evaluación** de cada módulo. Ordene módulos y contenidos arrastrándolos. Cuando esté listo, presione **Publicar**.
+- **Programas:** presione **Nuevo programa**, agregue módulos, cargue los contenidos (video, PDF, imagen, texto o enlace) y, si quiere, cree la **evaluación** de cada módulo. Ordene módulos y contenidos arrastrándolos. Cuando esté listo, presione **Publicar**.
 - **Asignaciones:** elija el programa, a quién se asigna (personas, un área o un cargo) y la fecha límite. Si alguien ya tiene el programa activo, se omite.
 - **Reportes:** combine los filtros (área, programa, estado y fechas) y presione **Exportar a Excel** o **Exportar a PDF**. El archivo incluye los filtros aplicados.
 - **Dashboard:** indicadores generales, entre ellos la tasa de aprobación de las evaluaciones.
